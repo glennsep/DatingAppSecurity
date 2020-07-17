@@ -68,7 +68,7 @@ namespace DatingApp.API.Controllers
 
                 return Ok(new
                 {
-                    token = GenerateJwtToekn(user),
+                    token = GenerateJwtToken(user),
                     user = appUser
                 });
             }
@@ -76,7 +76,7 @@ namespace DatingApp.API.Controllers
             return Unauthorized();
         }
 
-        private string GenerateJwtToekn(User user)
+        private string GenerateJwtToken(User user)
         {
             var claims = new[]
             {

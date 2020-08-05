@@ -71,17 +71,18 @@ using System;
               return Ok(messageThread);
          }
 
-          [HttpPost]
+         [HttpPost]
          public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto)
          {
-             var sender = await _repo.GetUser(userId);
+             var isCurrentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) == userId;
+             var sender = await _repo.GetUser(userId, isCurrentUser);
 
               if (sender.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                  return Unauthorized();
 
               messageForCreationDto.SenderId = userId;
 
-              var recipient = await _repo.GetUser(messageForCreationDto.RecipientId);
+              var recipient = await _repo.GetUser(messageForCreationDto.RecipientId, isCurrentUser);
 
               if (recipient == null)
                  return BadRequest("Could not find user");
